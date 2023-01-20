@@ -1,20 +1,20 @@
-import { Alert, Button, FlatList, Image, ImageBackground, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
+import { Alert, Button, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-import { useFonts } from "expo-font";
+import { useState } from "react";
 
 const styles = StyleSheet.create({
   container: {
+    paddingVertical: 80,
     flex: 1,
     backgroundColor: "#f0f0f0",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-between",
   },
   text: {
     color: "#444646",
     textAlign: "center",
     fontSize: 20,
-    // fontWeight: "bold",
+    fontWeight: "bold",
     margin: 10,
     header: {
       color: "#444646",
@@ -23,42 +23,74 @@ const styles = StyleSheet.create({
     },
   },
   image: {
-    margin: 20,
-    width: "90%",
+    height: 120,
     resizeMode: "contain",
+    marginVertical: 20,
   },
   dice: {
+    flex: 2,
     width: 150,
     height: 100,
   },
   grid: {
-    flex: 3,
+    flex: 4,
     marginHorizontal: "auto",
     width: "100%",
   },
   row: {
-    height: 100,
-    margin: 5,
+    flex: 1,
     flexDirection: "row",
-    // backgroundColor: "red",
   },
   col: {
     alignItems: "center",
     justifyContent: "center",
-    // backgroundColor: "lightblue",
     flex: 1,
   },
-  lastRolled: {
-    flex: 1,
-  },
-  historyContainer: {
+  dieWrapper: {
+    marginHorizontal: "auto",
+    width: "100%",
     flex: 1,
     flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    padding: 10,
+  },
+  selectedDie: {
+    width: "50%",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+  },
+  modifier: {
+    width: "50%",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+  },
+  roll: {
+    marginVertical: 20,
+    padding: 10,
+    flexDirection: "column",
+  },
+  historyWrapper: {
+    borderColor: "#fff",
+    borderWidth: 5,
+    borderRadius: 20,
+    flex: 2,
+    color: "white",
+    alignItems: "center",
+    width: "90%",
+  },
+  historyContainer: {
+    flexDirection: "row",
+    width: "90%",
     padding: 10,
   },
   history: {
-    // backgroundColor: "pink",
-    padding: 10,
+    color: "#444646",
+    fontSize: 20,
+    paddingHorizontal: 10,
+  },
+  clear: {
+    // flex: 1,
   },
 });
 
@@ -85,15 +117,45 @@ const DiceButton = ({ onPress, value }) => (
 
 export default function App() {
   const [rollHistory, setRollHistory] = useState([]);
-  const [lastDie, setLastDie] = useState();
+  const [die, setDie] = useState();
+  let [modifier, setModifier] = useState(0);
 
-  function rollDice(max) {
-    let answer = String(1 + Math.floor(Math.random() * max));
-    // Alert.alert("You rolled...", answer, [{ text: "OK" }]);
-    setLastDie(max);
-    setRollHistory((rollHistory) => [...rollHistory, answer]);
-    if (rollHistory.length > 9) {
-      rollHistory.shift();
+  function rollDice() {
+    let result = 1 + Math.floor(Math.random() * die);
+    let answer = result + modifier;
+
+    if (!die) {
+      Alert.alert(`Hold your horses!`, "\nYou need to select a die first.\n\nTap your icon of choice, add a modifier if needed, then hit roll.", [
+        { text: "OK" },
+      ]);
+    } else {
+      if (modifier) {
+        let message = `\nYou rolled ${result}\n\nModified by ${modifier ? (modifier > 0 ? "+" : "") : ""}${
+          modifier ? modifier : ""
+        }\n\nFor a final result of ${answer}`;
+        Alert.alert(`Here goes your d${die}!`, message, [{ text: "OK" }]);
+      } else if (modifier === 0) {
+        let message = `\nYou rolled ${answer}`;
+        Alert.alert(`Here goes your d${die}!`, message, [{ text: "OK" }]);
+      }
+      setRollHistory((rollHistory) => [...rollHistory, answer]);
+      if (rollHistory.length > 7) {
+        rollHistory.shift();
+      }
+    }
+  }
+
+  function selectDie(value) {
+    setDie(value);
+  }
+
+  function changeMod(x) {
+    if (x === "+") {
+      setModifier(modifier + 1);
+    } else if (x === "-") {
+      setModifier(modifier - 1);
+    } else {
+      setModifier(0);
     }
   }
 
@@ -104,47 +166,67 @@ export default function App() {
       <View style={styles.grid}>
         <Row>
           <Col>
-            <DiceButton value="d20" size="sm" onPress={() => rollDice(20)} />
+            <DiceButton value="d20" size="sm" onPress={() => selectDie(20)} />
           </Col>
           <Col>
-            <DiceButton value="d12" size="sm" onPress={() => rollDice(12)} />
+            <DiceButton value="d12" size="sm" onPress={() => selectDie(12)} />
           </Col>
           <Col>
-            <DiceButton value="d10" size="sm" onPress={() => rollDice(10)} />
+            <DiceButton value="d10" size="sm" onPress={() => selectDie(10)} />
           </Col>
         </Row>
         <Row>
           <Col>
-            <DiceButton value="d8" size="sm" onPress={() => rollDice(8)} />
+            <DiceButton value="d8" size="sm" onPress={() => selectDie(8)} />
           </Col>
           <Col>
-            <DiceButton value="d6" size="sm" onPress={() => rollDice(6)} />
+            <DiceButton value="d6" size="sm" onPress={() => selectDie(6)} />
           </Col>
           <Col>
-            <DiceButton value="d4" size="sm" onPress={() => rollDice(4)} />
+            <DiceButton value="d4" size="sm" onPress={() => selectDie(4)} />
           </Col>
         </Row>
       </View>
 
-      {lastDie ? (
-        <View style={styles.lastRolled}>
-          <Text style={styles.text.header}>Result: {rollHistory[rollHistory.length - 1]}</Text>
-          <Text style={styles.text}>(d{lastDie})</Text>
-        </View>
-      ) : null}
-
-      <Text style={styles.text}>Roll History:</Text>
-      <View style={styles.historyContainer}>
-        {rollHistory.map((num, index) => {
-          return (
-            <Text key={index} style={styles.history}>
-              {num}
+      <View style={styles.dieWrapper}>
+        {die ? (
+          <View style={styles.selectedDie}>
+            <Text style={styles.text.header}>
+              d{die}
+              {modifier ? modifier > 0 ? <Text> +{modifier}</Text> : <Text> {modifier}</Text> : null}
             </Text>
-          );
-        })}
+          </View>
+        ) : null}
+
+        <View style={styles.modifier}>
+          <Button color="#444646" title="+ 1" onPress={() => changeMod("+")} />
+          <Button color="#444646" title="- 1" onPress={() => changeMod("-")} />
+          <Button color="#444646" title="Reset" onPress={() => changeMod(0)} />
+        </View>
       </View>
 
-      {/* {showValue ? <Text>{rollHistory}</Text> : null} */}
+      <View style={styles.roll}>
+        <Button color="#37B9A0" title="    Roll    " onPress={() => rollDice()}></Button>
+      </View>
+
+      <View style={styles.historyWrapper}>
+        <Text style={styles.text}>
+          <Text style={{ fontStyle: "italic", fontWeight: "bold" }}>Previous rolls:</Text>
+        </Text>
+        <View style={styles.historyContainer}>
+          {rollHistory.map((num, index) => {
+            return (
+              <Text key={index} style={styles.history}>
+                {num}
+              </Text>
+            );
+          })}
+        </View>
+        <View style={styles.roll}></View>
+        <View style={styles.clear}>
+          <Button color="#37B9A0" title="Clear history" onPress={() => setRollHistory([])}></Button>
+        </View>
+      </View>
     </View>
   );
 }
