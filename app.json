@@ -4,36 +4,40 @@
     "slug": "rollypoly",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/d20.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/rollypoly-trsp.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/35a12418-7cca-4c67-91de-701efd6a8f43"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.captainread.rollypoly"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.captainread.rollypoly"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/d20.png"
     },
     "extra": {
       "eas": {
         "projectId": "35a12418-7cca-4c67-91de-701efd6a8f43"
       }
     },
-    "owner": "captainread"
+    "owner": "captainread",
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    }
   }
 }
