@@ -1,10 +1,10 @@
 # Rollypolly
 
-## Hosted site
+## Video demo
 
-To view the live version, please visit:
+To view a video demonstration of the app, please click here:
 
-> Link TBD
+> [Video demo](https://drive.google.com/file/d/1UiuPZbPE2hZmlpmUfmDreRgstxycdPdf/view?usp=share_link)
 
 ## Project summary
 
