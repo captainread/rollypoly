@@ -4,7 +4,7 @@
 
 To view a video demonstration of the app, please click here:
 
-> [Video demo](https://drive.google.com/file/d/1UiuPZbPE2hZmlpmUfmDreRgstxycdPdf/view?usp=share_link)
+> [Video demo](https://drive.google.com/file/d/1kEOY682uE1Q_bdd7JhZ4062K1oK7AsIw/view?usp=sharing)
 
 ## Project summary
 
